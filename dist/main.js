@@ -42,7 +42,7 @@ const createShop = () => {
         shop.innerHTML = shopItemsData.map((product)=>{
             let { id , name , price , desc , img } = product;
             return `
-            <div class="col-3">
+            <div class="col-6 col-lg-4 col-xl-3 mt-5">
                     <div id=product-id-${id} class="item">
                           <img src="${img}" alt="">
                           <div class="details">
@@ -83,13 +83,32 @@ let plus = (id) => {
 
     console.log(storeProduct);
     
+    update(selectedProduct.id);
+
 }
 
 let minus = (id) => {
     let selectedProduct = id;
-    console.log(selectedProduct.id);
+
+    let serachProduct = storeProduct.find((product)=> product.id === selectedProduct.id);
+
+    if(serachProduct.item === 0) return;
+    else {
+        serachProduct.item -=1;
+    }
+
+    update(selectedProduct.id);
 }
 
-let update = () => {
+let update = (id) => {
+    let serachProduct = storeProduct.find((product)=> product.id === id);
+    document.getElementById(id).innerHTML = serachProduct.item;
+    cartCalculation();
+}
+
+let cartCalculation = () => {
+    const cartAmount = document.getElementById('cartAmount');
+
+    cartAmount.innerHTML = (storeProduct.map(product => product.item).reduce((x,y)=>x+y,0));
 
 }
