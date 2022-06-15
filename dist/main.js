@@ -1,6 +1,6 @@
 let shop = document.getElementById('shop');
 
-let storeProduct = JSON.parse(localStorage.getItem('data')) || [];
+let storeProduct = [];
 
 
 //data 
@@ -41,7 +41,6 @@ const createShop = () => {
     return (
         shop.innerHTML = shopItemsData.map((product)=>{
             let { id , name , price , desc , img } = product;
-            let searchQuantity = storeProduct.find(product => product.id === id) || [];
             return `
             <div class="col-6 col-lg-4 col-xl-3 mt-5">
                     <div id=product-id-${id} class="item">
@@ -53,7 +52,7 @@ const createShop = () => {
                                  <h5 class="">BDT ${price}</h5>
                                 <div class="buttons">
                                    <i onclick="minus(${id})" class="bi bi-dash-circle"></i>
-                                    <div id=${id} class="quantity">${searchQuantity.item === undefined ? 0 : searchQuantity.item }</div>
+                                    <div id=${id} class="quantity">0</div>
                                    <i onclick="plus(${id})" class="bi bi-plus-circle"></i>
                                 </div>
                                  </div>
@@ -82,11 +81,8 @@ let plus = (id) => {
         serachProduct.item +=1;
     }
 
-   
-
+    
     update(selectedProduct.id);
-
-    localStorage.setItem('data', JSON.stringify(storeProduct));
 
 }
 
@@ -95,20 +91,12 @@ let minus = (id) => {
 
     let serachProduct = storeProduct.find((product)=> product.id === selectedProduct.id);
 
-    if(serachProduct === undefined) return
-    else if(serachProduct.item === 0) return;
+    if(serachProduct.item === 0) return;
     else {
         serachProduct.item -=1;
     }
 
-    
-
     update(selectedProduct.id);
-
-    storeProduct = storeProduct.filter((product => product.item !== 0));
-
-    localStorage.setItem('data', JSON.stringify(storeProduct))
-
 }
 
 let update = (id) => {
@@ -118,8 +106,7 @@ let update = (id) => {
 }
 
 let cartCalculation = () => {
-    let cartAmount = document.getElementById('cartAmount');
-
+    const cartAmount = document.getElementById('cartAmount');
     cartAmount.innerHTML = (storeProduct.map(product => product.item).reduce((x,y)=>x+y,0));
 
 }
